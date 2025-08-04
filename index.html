@@ -6,6 +6,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="fav2.png" type="image/png" />
 
   <style>
     /* 🌐 Base Styling */
@@ -155,6 +156,21 @@ body.dark-mode button {
 body.dark-mode #buttonContainer {
   background: #121212;
 }
+.sort-controls {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.sort-controls label,
+.sort-controls select,
+.sort-controls button {
+  font-size: 16px;
+  padding: 5px;
+}
 
   </style>
 </head>
@@ -173,7 +189,24 @@ body.dark-mode #buttonContainer {
     <button onclick="exportCSV()">⬇️ Export CSV</button>
     <button onclick="exportPDF()">🧾 Export PDF</button>
   </div>
-  
+  <!-- Sort Controls -->
+<div class="sort-controls">
+  <label for="sortColumn">Sort by:</label>
+  <select id="sortColumn">
+    <option value="">-- Select Column --</option>
+    <option value="Full name">Full Name</option>
+    <option value="Blood Group(Enter in Bold. Eg:- B+)">Blood Group</option>
+    <option value="Current Address (Enter District)">Location</option>
+  </select>
+
+  <select id="sortOrder">
+    <option value="asc">A → Z</option>
+    <option value="desc">Z → A</option>
+  </select>
+
+  <button onclick="sortTable()">Sort</button>
+</div>
+
   <table id="donorTable">
     <thead>
       <tr>
@@ -368,7 +401,7 @@ function filterTable() {
   const group = document.getElementById("searchGroup").value;
 
   filteredDonors = donors.filter(donor => {
-    const donorName = (donor["Full Name"] || "").toLowerCase();
+    const donorName = (donor["Full name"] || "").toLowerCase();
     const donorLocation = (donor["Current Address (Enter District)"] || "").toLowerCase();
     const donorGroup = donor["Blood Group(Enter in Bold. Eg:- B+)"] || "";
     return (
@@ -386,6 +419,25 @@ document.getElementById("searchLocationDropdown").addEventListener("change", fil
 document.getElementById("searchGroup").addEventListener("change", filterTable);
 
 fetchData();
+
+function sortTable() {
+  const sortColumn = document.getElementById("sortColumn").value;
+  const sortOrder = document.getElementById("sortOrder").value;
+
+  if (!sortColumn) return;
+
+  filteredDonors.sort((a, b) => {
+    const valA = (a[sortColumn] || "").toString().toLowerCase();
+    const valB = (b[sortColumn] || "").toString().toLowerCase();
+
+    if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+    if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  renderTable(filteredDonors);
+}
+
 </script>
 
 </body>
