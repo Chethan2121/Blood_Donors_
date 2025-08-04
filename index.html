@@ -235,7 +235,7 @@ function renderTable(data) {
       "Full name", "Age", "Gender", "Contact number", "Email",
       "Permanent Address(Enter District)", "Current Address (Enter District)",
       "Blood Group(Enter in Bold. Eg:- B+)",
-      "Willing to donate",
+      "Are you willing to donate blood in future emergencies?  ",
       "Any existing health conditions?"
     ];
 
@@ -292,7 +292,7 @@ async function exportPDF() {
     d["Permanent Address(Enter District)"] || "",
     d["Current Address (Enter District)"] || "",
     d["Blood Group(Enter in Bold. Eg:- B+)"] || "",
-    d["Willing to donate"] || "",
+    d["Are you willing to donate blood in future emergencies?  "] || "",
     d["Any existing health conditions?"] || ""
   ]);
 
